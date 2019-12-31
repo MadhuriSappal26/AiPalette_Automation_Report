@@ -16,15 +16,11 @@ Cypress.Commands.add("consumer_quote",() => {
     .then((response)=>
     {
         expect(response.body.sub_categories).to.not.have.length(0)
-        //console.log(response.body)
-        var sub_categories_array=response.body.sub_categories
-        var trends_array=response.body.trends
+        var sub_categories_array=response.body.sub_categories      // Get the SubCategories from array
         var final_ing_list=[]
-        //console.log(sub_categories_array)
-       //console.log(trends_array)
        sub_categories_array.forEach(($obj)=>
        {
-        console.log($obj[0].ingredient,$obj[0].name)
+        console.log($obj[0].ingredient,$obj[0].name)               //Get the Ingridient id and name from array
        var ingList=$obj[0].ingredient
        final_ing_list.push(ingList)
       })
@@ -34,7 +30,7 @@ Cypress.Commands.add("consumer_quote",() => {
     {
         cy.request({
             method: 'GET',
-            url: 'https://prod-api.aipalette.com/api/ingredients/ingredient/'+ids+'/quotes/', // baseUrl is prepended to url
+            url: 'https://prod-api.aipalette.com/api/ingredients/ingredient/'+ids+'/quotes/', // baseUrl is prepended to url, id are dynamically fetched one by one
            headers:
             { 
             'Content-Type':'application/json',
@@ -42,11 +38,10 @@ Cypress.Commands.add("consumer_quote",() => {
             },
         
         }).then((response)=>{
-           //expect(response.body.weibo_quotes).to.not.have.length(0)
-            var weibo_quotes_array=response.body.weibo_quotes
-            if(weibo_quotes_array.length==0)
+            var weibo_quotes_array=response.body.weibo_quotes        //Get the Weibo quotes of consumer of particular id
+            if(weibo_quotes_array.length==0)                         //If consumer quote is missing
             {
-                console.log("missing customer quote.....", ids)
+                console.log("missing customer quote.....", ids)       //Get the id's whose consumer quote is missing
                 console.log(response.body)
                 expect(response.body.weibo_quotes).to.have.length(0)
             }
@@ -55,37 +50,4 @@ Cypress.Commands.add("consumer_quote",() => {
         
     })
 })
-    
-  /*  cy.request({
-    method: 'GET',
-    url: 'https://prod-api.aipalette.com/api/ingredients/ingredient/7327/quotes/', // baseUrl is prepended to url
-   headers:
-    { 
-    'Content-Type':'application/json',
-    'Authorization':'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTc3NzY4NTQ5LCJqdGkiOiJkODkyYTFiOTIwYTc0Yjg5OTJhMDcxOWFhZTQwOTExMSIsInVzZXJfaWQiOjIyOX0.0DiQmAvQaJ1dlNHYqUh3gErZ2vQK4uNJVrqYOzZWwkg'
-    },
-
-    
-
-})
-.then((response)=>{
-console.log(response.body)
-expect(response.body.weibo_quotes).to.not.have.length(0)
-var weibo_quotes_array=response.body.weibo_quotes
-console.log(weibo_quotes_array)
-var text_array=weibo_quotes_array.filter((x)=>x.text)
-console.log(text_array)
-expect(text_array).to.not.to.be.null
-var quoteList=[]
-weibo_quotes_array.forEach(($obj,i)=>
-{
-var textList=$obj.text
-var usernameList=$obj.username
-console.log(usernameList, textList)
-quoteList.push(textList,usernameList)
-})
-//var filtered_array=resp_array.filter((x)=> x.subcategories)
-//console.log(filtered_array)
-
-})*/
 })

@@ -15,26 +15,20 @@ Cypress.Commands.add("ingridient_graph",() => {
     })
     .then((response)=>
     {
-        expect(response.body.sub_categories).to.not.have.length(0)
-        var sub_categories_length=response.body.sub_categories.length
-        var sub_categories_array=response.body.sub_categories
-        var trends_array=response.body.trends
+        expect(response.body.sub_categories).to.not.have.length(0)      
+        var sub_categories_array=response.body.sub_categories      //Get the subcategories
         var final_ing_list=[]
-        //console.log(sub_categories_array)
-       //console.log(trends_array)
        sub_categories_array.forEach(($obj)=>
        {
-           //console.log($obj[0].ingredient)
-      var ingList=$obj[0].ingredient
+      var ingList=$obj[0].ingredient                              //Get the ingredients from subcategories
       final_ing_list.push(ingList)
       })
-     //console.log(final_ing_list)
 
     final_ing_list.forEach((ids)=>
     {
         cy.request({
             method: 'GET',
-            url: 'https://prod-api.aipalette.com/api/ingredients/ingredient/'+ids+'/', // baseUrl is prepended to url
+            url: 'https://prod-api.aipalette.com/api/ingredients/ingredient/'+ids+'/', // baseUrl is prepended to url,get the id's one by one
            headers:
             { 
             'Content-Type':'application/json',
@@ -43,10 +37,10 @@ Cypress.Commands.add("ingridient_graph",() => {
             'failOnStatusCode': 'false'
         
         }).then((response)=>{
-            var trend_chart_array=response.body.trendChart
+            var trend_chart_array=response.body.trendChart                //Get the charts
             
             //console.log(trend_chart_array)
-            if(trend_chart_array.length==0)
+            if(trend_chart_array.length==0)                               //Get the ingridient having missing chart
             {
                 console.log("missing ingridient graph.....")
                 console.log(response.body)
